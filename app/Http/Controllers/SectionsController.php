@@ -113,7 +113,7 @@ class SectionsController extends Controller
     public function destroy(Request $request)
     {
         $id = $request->id;
-        $section = sections::find($id)->delete();
+        sections::find($id)->delete();
         session()->flash('Delete','تم حذف القسم بنجاح');
         return redirect('/sections');
     }
