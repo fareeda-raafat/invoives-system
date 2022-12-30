@@ -31,10 +31,14 @@
             <div class="card mg-b-20">
                 <div class="card-header pb-0">
 
+                    <a href="invoices/create" class="modal-effect btn btn-sm btn-primary" style="color:white"><i
+                            class="fas fa-plus"></i>&nbsp; اضافة فاتورة</a>
+
+
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="example" class="table key-buttons text-md-nowrap">
+                        <table id="example1" class="table key-buttons text-md-nowrap">
                             <thead>
                                 <tr>
                                     <th class="border-bottom-0">#</th>
@@ -52,20 +56,37 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th class="border-bottom-0">1</th>
-                                    <th class="border-bottom-0">23456</th>
-                                    <th class="border-bottom-0">2020-08-12 </th>
-                                    <th class="border-bottom-0">2023-07-09 </th>
-                                    <th class="border-bottom-0">CC</th>
-                                    <th class="border-bottom-0">البنك الأهلي</th>
-                                    <th class="border-bottom-0">26%</th>
-                                    <th class="border-bottom-0"> 10%</th>
-                                    <th class="border-bottom-0"> 37554 </th>
-                                    <th class="border-bottom-0">31117 </th>
-                                    <th class="border-bottom-0"> غير مدفوعة</th>
-                                    <th class="border-bottom-0">لم يتم السداد بعد</th>
-                                </tr>
+                                @php
+                                    $i = 0;
+                                @endphp
+
+                                @foreach ($invoices as $x)
+                                    <tr>
+                                        <td>{{ ++$i }}</td>
+                                        <td>{{ $x->invoice_number }}</td>
+                                        <td>{{ $x->invoice_Date }} </td>
+                                        <td>{{ $x->due_Date }}</td>
+                                        <td>{{ $x->product }}</td>
+                                        <td>{{ $x->section->section_name }}</td>
+                                        <td>{{ $x->discount }}</td>
+                                        <td> {{ $x->rate_vat }}</td>
+                                        <td> {{ $x->value_vat }} </td>
+                                        <td>{{ $x->total }} </td>
+                                        <td>
+                                            @if ($x->value_status == 1)
+                                                <span class="text-success">{{ $x->status }}</span>
+                                            @elseif($x->value_status == 2)
+                                                <span class="text-danger">{{ $x->status }}</span>
+                                            @else
+                                                <span class="text-warning">{{ $x->status }}</span>
+                                            @endif
+
+                                        </td>
+
+                                        <th class="border-bottom-0">{{ $x->note }}</th>
+                                    </tr>
+                                @endforeach
+
                             </tbody>
                         </table>
                     </div>

@@ -13,22 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('invoices', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('invoices_details', function (Blueprint $table) {
+            $table->bigIncrements('id');
             $table->string('invoice_number', 50);
-            $table->date('invoice_Date')->nullable();
-            $table->date('due_date')->nullable();
+            $table->unsignedBigInteger('id_Invoice');
+            $table->foreign('id_Invoice')->references('id')->on('invoices')->onDelete('cascade');
             $table->string('product', 50);
-            $table->string('section');
-            $table->string('discount');
-            $table->decimal('value_vat', 8, 2);
-            $table->string('rate_vat');
-            $table->decimal('total', 8, 2);
+            $table->string('section', 999);
             $table->string('status', 50);
-            $table->integer('value_Status');
+            $table->integer('value_status');
             $table->text('note')->nullable();
-            $table->string('user');
-            $table->softDeletes();
+            $table->string('user', 300);
             $table->timestamps();
         });
     }
@@ -40,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('invoices');
+        Schema::dropIfExists('invoices_details');
     }
 };

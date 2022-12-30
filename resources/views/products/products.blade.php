@@ -222,11 +222,11 @@
 
                                 @foreach ($products as $product)
                                     <tr>
-                                        <td class="border-bottom-0">{{ ++$i }}</td>
-                                        <td class="border-bottom-0">{{ $product->Product_name }}</td>
-                                        <td class="border-bottom-0">{{ $product->section->section_name }}</td>
-                                        <td class="border-bottom-0">{{ $product->description }}</td>
-                                        <td class="border-bottom-0">
+                                        <td >{{ ++$i }}</td>
+                                        <td >{{ $product->Product_name }}</td>
+                                        <td >{{ $product->section->section_name }}</td>
+                                        <td >{{ $product->description }}</td>
+                                        <td >
 
 
                                             <a class="modal-effect btn btn-sm btn-info" data-effect="effect-scale"

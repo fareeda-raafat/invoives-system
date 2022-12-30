@@ -35,7 +35,7 @@ Route::middleware('auth')->group(function () {
 Route::resource('invoices', InvoicesController::class);
 Route::resource('sections', SectionsController::class);
 Route::resource('products', ProductsController::class);
-
+Route::get('/section/{id}', [InvoicesController::class, 'getproducts']);
 
 require __DIR__ . '/auth.php';
 Route::get('/{page}',  [AdminController::class, 'index']);

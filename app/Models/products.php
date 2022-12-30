@@ -8,9 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class products extends Model
 {
     use HasFactory;
-    protected $fillable = [
-        'Product_name', 'description', 'section_id'
-    ];
+    protected $guarded = [];
 
     public function section()
     {

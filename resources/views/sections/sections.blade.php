@@ -202,10 +202,10 @@
 
                                 @foreach ($sections as $section)
                                     <tr>
-                                        <td class="border-bottom-0">{{ ++$i }}</td>
-                                        <td class="border-bottom-0">{{ $section->section_name }}</td>
-                                        <td class="border-bottom-0">{{ $section->description }}</td>
-                                        <td class="border-bottom-0">
+                                        <td>{{ ++$i }}</td>
+                                        <td>{{ $section->section_name }}</td>
+                                        <td>{{ $section->description }}</td>
+                                        <td>
 
 
                                             <a class="modal-effect btn btn-sm btn-info" data-effect="effect-scale"
