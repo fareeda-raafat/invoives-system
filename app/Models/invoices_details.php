@@ -9,4 +9,9 @@ class invoices_details extends Model
 {
     use HasFactory;
     protected $guarded = [];
+
+    public function section_d()
+    {
+        return $this->belongsTo(sections::class);
+    }
 }

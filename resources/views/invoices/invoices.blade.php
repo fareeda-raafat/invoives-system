@@ -63,7 +63,11 @@
                                 @foreach ($invoices as $x)
                                     <tr>
                                         <td>{{ ++$i }}</td>
-                                        <td>{{ $x->invoice_number }}</td>
+                                        <td>
+                                            <a href="{{ url('invoices_details') }}/{{ $x->id }}">
+                                                {{ $x->invoice_number }}
+                                            </a>
+                                        </td>
                                         <td>{{ $x->invoice_Date }} </td>
                                         <td>{{ $x->due_Date }}</td>
                                         <td>{{ $x->product }}</td>
@@ -74,13 +78,12 @@
                                         <td>{{ $x->total }} </td>
                                         <td>
                                             @if ($x->value_status == 1)
-                                                <span class="text-success">{{ $x->status }}</span>
+                                                <span class="badge badge-pill badge-success">{{ $x->status }}</span>
                                             @elseif($x->value_status == 2)
-                                                <span class="text-danger">{{ $x->status }}</span>
+                                                <span class="badge badge-pill badge-danger">{{ $x->status }}</span>
                                             @else
-                                                <span class="text-warning">{{ $x->status }}</span>
+                                                <span class="badge badge-pill badge-warning">{{ $x->status }}</span>
                                             @endif
-
                                         </td>
 
                                         <th class="border-bottom-0">{{ $x->note }}</th>

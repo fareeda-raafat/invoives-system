@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\invoice_attachments;
+use App\Models\invoices;
 use App\Models\invoices_details;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class InvoicesDetailsController extends Controller
 {
@@ -14,7 +17,6 @@ class InvoicesDetailsController extends Controller
      */
     public function index()
     {
-        //
     }
 
     /**
@@ -78,8 +80,33 @@ class InvoicesDetailsController extends Controller
      * @param  \App\Models\invoices_details  $invoices_details
      * @return \Illuminate\Http\Response
      */
-    public function destroy(invoices_details $invoices_details)
+    public function destroy(Request $request)
     {
-        //
+        $invoices = invoice_attachments::findOrFail($request->id_file);
+        $invoices->delete();
+        Storage::disk('public_uploads')->delete($request->invoice_number . '/' . $request->file_name);
+        session()->flash('delete', 'تم حذف المرفق بنجاح');
+        return back();
+    }
+
+    public function get_details($id)
+    {
+
+        $invoice = invoices::where('id', $id)->first();
+        $details = invoices_details::where('id_Invoice', $id)->get();
+        $attatchments = invoice_attachments::where('invoice_id', $id)->get();
+        return view('invoices.invoices_details', compact('invoice', 'details', 'attatchments'));
+    }
+
+    public function view_file($invoice_number, $file_name)
+    {
+        $contents = public_path('Attachments/' . $invoice_number . '/' . $file_name);
+        return response()->file($contents);
+    }
+
+    public function download_file($invoice_number, $file_name)
+    {
+        $contents = public_path('Attachments/' . $invoice_number . '/' . $file_name);
+        return response()->download($contents);
     }
 }
