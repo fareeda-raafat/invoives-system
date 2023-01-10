@@ -6,9 +6,14 @@ use App\Models\invoice_attachments;
 use App\Models\invoices;
 use App\Models\invoices_details;
 use App\Models\sections;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
+use App\Exports\InvoicesExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Psy\ExecutionLoopClosure;
 
 class InvoicesController extends Controller
 {
@@ -31,7 +36,7 @@ class InvoicesController extends Controller
     public function create()
     {
         $sections = sections::all();
-        return view('invoices.invoices', compact('sections'));
+        return view('invoices.add_invoices', compact('sections'));
     }
 
     /**
@@ -97,6 +102,14 @@ class InvoicesController extends Controller
         }
 
 
+        // notification
+
+        $user = User::get();
+        $invoices = invoices::latest()->first();
+        Notification::send($user, new \App\Notifications\AddInvoice($invoices));
+
+
+
 
         session()->flash('Add', 'تم إضافة الفاتورة بنجاح');
         return redirect('invoices.invoices');
@@ -151,5 +164,10 @@ class InvoicesController extends Controller
     {
         $products = DB::table("products")->where("section_id", $id)->pluck("Product_name", "id");
         return json_encode($products);
+    }
+
+    public function export()
+    {
+        return Excel::download(new InvoicesExport, 'قائمة الفواتير.xlsx');
     }
 }

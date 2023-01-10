@@ -3,12 +3,20 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CustomersReportController;
 use App\Http\Controllers\InvoiceAttachmentsController;
 use App\Http\Controllers\InvoicesController;
 use App\Http\Controllers\InvoicesDetailsController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\SectionsController;
 use App\Models\invoice_attachments;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InvoicsReportController;
+use App\Exports\InvoicesExport;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\RoleController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +32,8 @@ use App\Models\invoice_attachments;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::resource('index', HomeController::class);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -42,7 +52,19 @@ Route::get('/section/{id}', [InvoicesController::class, 'getproducts']);
 Route::get('/invoices_details/{id}', [InvoicesDetailsController::class, 'get_details']);
 Route::get('/View_file/{invoice_nubmber}/{file_name}', [InvoicesDetailsController::class, 'view_file']);
 Route::get('/download/{invoice_number}/{file_name}', [InvoicesDetailsController::class, 'download_file']);
-Route::post('/delete_file',[InvoicesDetailsController::class , 'destroy'])->name('delete_file');
+Route::post('/delete_file', [InvoicesDetailsController::class, 'destroy'])->name('delete_file');
+Route::get('invoices_report', [InvoicsReportController::class, 'index']);
+Route::post('Search_invoices', [InvoicsReportController::class, 'Search_invoices']);
+
+Route::get('customer_reports', [CustomersReportController::class], 'index');
+Route::post('Search_customers', [CustomersReportController::class], 'Search_customers');
+
+Route::get('export_invoices', [InvoicesController::class, 'export']);
+
+Route::group(['middleware' => ['auth']], function () {
+    Route::resource('roles', RoleController::class);
+    Route::resource('users', UserController::class);
+});
 
 require __DIR__ . '/auth.php';
 Route::get('/{page}',  [AdminController::class, 'index']);
