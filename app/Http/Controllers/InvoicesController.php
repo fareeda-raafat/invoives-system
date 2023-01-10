@@ -11,9 +11,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
+use App\Notifications\Add_invoice_new;
 use App\Exports\InvoicesExport;
 use Maatwebsite\Excel\Facades\Excel;
-use Psy\ExecutionLoopClosure;
 
 class InvoicesController extends Controller
 {
@@ -104,9 +104,8 @@ class InvoicesController extends Controller
 
         // notification
 
-        $user = User::get();
-        $invoices = invoices::latest()->first();
-        Notification::send($user, new \App\Notifications\AddInvoice($invoices));
+        $user = User::first();
+        Notification::send($user, new Add_invoice_new($id_invoice));
 
 
 
