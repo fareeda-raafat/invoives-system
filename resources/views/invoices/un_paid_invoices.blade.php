@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-    برنامج الفواتير - قائمة الفواتير
+    برنامج الفواتير - قائمة الفواتير الغير مدفوعة
 @endsection
 @section('css')
     <!-- Internal Data table css -->
@@ -17,7 +17,7 @@
         <div class="my-auto">
             <div class="d-flex">
                 <h4 class="content-title mb-0 my-auto">الفواتير</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ قائمة
-                    الفواتير</span>
+                    الفواتيرالغير مدفوعة </span>
             </div>
         </div>
 
@@ -60,10 +60,6 @@
             <div class="card mg-b-20">
                 <div class="card-header pb-0">
 
-                    <a href="invoices/create" class="modal-effect btn btn-sm btn-primary" style="color:white"><i
-                            class="fas fa-plus"></i>&nbsp; اضافة فاتورة</a>
-
-
                     <a class="modal-effect btn btn-sm btn-primary" href="{{ url('export_invoices') }}"
                         style="color:white"><i class="fas fa-file-download"></i>&nbsp;تصدير اكسيل</a>
                 </div>
@@ -76,6 +72,7 @@
                                     <th class="border-bottom-0">رقم الفاتورة</th>
                                     <th class="border-bottom-0">تاريخ الفاتورة</th>
                                     <th class="border-bottom-0">تاريخ الاستحقاق</th>
+                                    <th class="border-bottom-0">تاريخ الدفع</th>
                                     <th class="border-bottom-0"> المنتج</th>
                                     <th class="border-bottom-0">القسم</th>
                                     <th class="border-bottom-0">الخصم</th>
@@ -102,6 +99,7 @@
                                         </td>
                                         <td>{{ $x->invoice_Date }} </td>
                                         <td>{{ $x->due_Date }}</td>
+                                        <td>{{ $x->payment_Date }}</td>
                                         <td>{{ $x->product }}</td>
                                         <td>{{ $x->section->section_name }}</td>
                                         <td>{{ $x->discount }}</td>

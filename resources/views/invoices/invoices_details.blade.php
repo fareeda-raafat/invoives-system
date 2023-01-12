@@ -180,99 +180,139 @@
                                         </div>
 
                                         <div class="tab-pane" id="tab6">
-                                            <div class="table-responsive">
-                                                <table id="example1" class="table key-buttons text-md-nowrap">
-                                                    <thead>
-                                                        <tr>
-                                                            <th class="border-bottom-0">#</th>
-                                                            <th class="border-bottom-0">رقم الفاتورة</th>
-                                                            <th class="border-bottom-0">اسم المرفق</th>
-                                                            <th class="border-bottom-0">قام بإضافته</th>
-                                                            <th class="border-bottom-0">العمليات</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @php
-                                                            $i = 0;
-                                                        @endphp
-                                                        @foreach ($attatchments as $attach)
+                                            {{-- start of add file  --}}
+                                            <div class="card card-statistics">
+                                                <div class="card-body">
+                                                    <p class="text-danger">* صيغة المرفق pdf, jpeg ,.jpg , png </p>
+                                                    <h5 class="card-title">اضافة مرفقات</h5>
+                                                    <form action="{{ url('/InvoiceAttachments') }}" method="POST"
+                                                        enctype="multipart/form-data">
+                                                        @csrf
+                                                        <div class="form-group row">
+
+                                                            <div class="col-sm-10">
+                                                                <input type="hidden" class="form-control"
+                                                                    id="inlineFormInput" name="invoice_num"
+                                                                    value="{{ $invoice->invoice_number }}">
+                                                            </div>
+
+                                                            <div class="col-sm-10">
+                                                                <input type="hidden" class="form-control"
+                                                                    id="inlineFormInput" name="invoice_id"
+                                                                    value="{{ $invoice->id }}">
+                                                            </div>
+
+                                                            <div class="col-sm-10">
+                                                                <input type="file" class="form-control "
+                                                                    id="inlineFormInput" name="invoice_file">
+                                                            </div>
+
+                                                            <div class="col-auto">
+                                                                <button type="submit"
+                                                                    class="btn btn-primary">حفظ</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                {{-- start of add file  --}}
+
+
+
+                                                <div class="table-responsive">
+                                                    <table id="example1" class="table key-buttons text-md-nowrap">
+                                                        <thead>
                                                             <tr>
-                                                                <td>{{ ++$i }}</td>
-                                                                <td>{{ $attach->invoice_number }}</td>
-                                                                <td>{{ $attach->file_name }}</td>
-                                                                <td>{{ $attach->created_by }}</td>
-                                                                <td colspan="2">
-
-                                                                    <a class="btn btn-outline-success btn-sm"
-                                                                        href="{{ url('View_file') }}/{{ $attach->invoice_number }}/{{ $attach->file_name }}"
-                                                                        role="button"><i class="fas fa-eye"></i>&nbsp;
-                                                                        عرض</a>
-
-                                                                    <a class="btn btn-outline-info btn-sm"
-                                                                        href="{{ url('download') }}/{{ $attach->invoice_number }}/{{ $attach->file_name }}"
-                                                                        role="button"><i class="fas fa-download"></i>&nbsp;
-                                                                        تحميل</a>
-
-                                                                    <button class="btn btn-outline-danger btn-sm"
-                                                                        data-toggle="modal"
-                                                                        data-file_name="{{ $attach->file_name }}"
-                                                                        data-invoice_number="{{ $attach->invoice_number }}"
-                                                                        data-id_file="{{ $attach->id }}"
-                                                                        data-target="#delete_file">حذف</button>
-
-                                                                </td>
+                                                                <th class="border-bottom-0">#</th>
+                                                                <th class="border-bottom-0">رقم الفاتورة</th>
+                                                                <th class="border-bottom-0">اسم المرفق</th>
+                                                                <th class="border-bottom-0">قام بإضافته</th>
+                                                                <th class="border-bottom-0">العمليات</th>
                                                             </tr>
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
+                                                        </thead>
+                                                        <tbody>
+                                                            @php
+                                                                $i = 0;
+                                                            @endphp
+                                                            @foreach ($attatchments as $attach)
+                                                                <tr>
+                                                                    <td>{{ ++$i }}</td>
+                                                                    <td>{{ $attach->invoice_number }}</td>
+                                                                    <td>{{ $attach->file_name }}</td>
+                                                                    <td>{{ $attach->created_by }}</td>
+                                                                    <td colspan="2">
+
+                                                                        <a class="btn btn-outline-success btn-sm"
+                                                                            href="{{ url('View_file') }}/{{ $attach->invoice_number }}/{{ $attach->file_name }}"
+                                                                            role="button"><i
+                                                                                class="fas fa-eye"></i>&nbsp;
+                                                                            عرض</a>
+
+                                                                        <a class="btn btn-outline-info btn-sm"
+                                                                            href="{{ url('download') }}/{{ $attach->invoice_number }}/{{ $attach->file_name }}"
+                                                                            role="button"><i
+                                                                                class="fas fa-download"></i>&nbsp;
+                                                                            تحميل</a>
+
+                                                                        <button class="btn btn-outline-danger btn-sm"
+                                                                            data-toggle="modal"
+                                                                            data-file_name="{{ $attach->file_name }}"
+                                                                            data-invoice_number="{{ $attach->invoice_number }}"
+                                                                            data-id_file="{{ $attach->id }}"
+                                                                            data-target="#delete_file">حذف</button>
+
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
-
                     </div>
                 </div>
             </div>
+            <!-- /div -->
+
+
         </div>
-        <!-- /div -->
+        <!-- /row -->
+        <!-- delete -->
+        <div class="modal fade" id="delete_file" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">حذف المرفق</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action="{{ route('delete_file') }}" method="post">
 
+                        @csrf
+                        <div class="modal-body">
+                            <p class="text-center">
+                            <h6 style="color:red"> هل انت متاكد من عملية حذف المرفق ؟</h6>
+                            </p>
 
-    </div>
-    <!-- /row -->
-    <!-- delete -->
-    <div class="modal fade" id="delete_file" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">حذف المرفق</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                            <input type="hidden" name="id_file" id="id_file" value="">
+                            <input type="hidden" name="file_name" id="file_name" value="">
+                            <input type="hidden" name="invoice_number" id="invoice_number" value="">
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">إلغاء</button>
+                            <button type="submit" class="btn btn-danger">تأكيد</button>
+                        </div>
+                    </form>
                 </div>
-                <form action="{{ route('delete_file') }}" method="post">
-
-                    @csrf
-                    <div class="modal-body">
-                        <p class="text-center">
-                        <h6 style="color:red"> هل انت متاكد من عملية حذف المرفق ؟</h6>
-                        </p>
-
-                        <input type="hidden" name="id_file" id="id_file" value="">
-                        <input type="hidden" name="file_name" id="file_name" value="">
-                        <input type="hidden" name="invoice_number" id="invoice_number" value="">
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">إلغاء</button>
-                        <button type="submit" class="btn btn-danger">تأكيد</button>
-                    </div>
-                </form>
             </div>
         </div>
-    </div>
     </div>
     </div>
     <!-- Container closed -->

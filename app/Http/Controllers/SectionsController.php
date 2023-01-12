@@ -100,6 +100,7 @@ class SectionsController extends Controller
             'section_name' => $request->section_name,
             'description' => $request->description
         ]);
+
         session()->flash('Edit', 'تم تعديل القسم بنجاح');
         return redirect('/sections');
     }
@@ -112,9 +113,10 @@ class SectionsController extends Controller
      */
     public function destroy(Request $request)
     {
+        echo 'delete';
         $id = $request->id;
         sections::find($id)->delete();
-        session()->flash('Delete','تم حذف القسم بنجاح');
+        session()->flash('Delete', 'تم حذف القسم بنجاح');
         return redirect('/sections');
     }
 }

@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Notification;
 use App\Notifications\Add_invoice_new;
 use App\Exports\InvoicesExport;
 use Maatwebsite\Excel\Facades\Excel;
+use PhpParser\Node\Stmt\Return_;
 
 class InvoicesController extends Controller
 {
@@ -131,9 +132,11 @@ class InvoicesController extends Controller
      * @param  \App\Models\invoices  $invoices
      * @return \Illuminate\Http\Response
      */
-    public function edit(invoices $invoices)
+    public function edit($id)
     {
-        //
+        $invoices = invoices::where('id', $id)->first();
+        $sections = sections::all();
+        return view('invoices.edit_invoice', compact('sections', 'invoices'));
     }
 
     /**
@@ -143,9 +146,31 @@ class InvoicesController extends Controller
      * @param  \App\Models\invoices  $invoices
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, invoices $invoices)
+    public function update(Request $request, $id)
     {
-        //
+        $id = $request->invoices_id;
+        $invoices = invoices::find($id);
+        $invoices->update([
+            'invoice_number' => $request->invoice_number,
+            'invoice_Date' => $request->invoice_Date,
+            'due_Date' => $request->due_Date,
+            'product' => $request->product,
+            'section_id' => $request->section,
+            'discount' => $request->discount,
+            'rate_vat' => $request->rate_vat,
+            'value_vat' => $request->value_vat,
+            'total' => $request->total,
+            'status' => 'غير مدفوعة',
+            'value_status' => 2,
+            'note' => $request->note,
+            'user' => Auth::user()->name,
+            'total' => $request->total,
+            'Amount_Commission' => $request->Amount_Commission,
+            'Amount_collection' => $request->Amount_collection
+        ]);
+
+        session()->flash('Edit', 'تم تعديل الفاتورة بنجاح');
+        return redirect('invoices.invoices');
     }
 
     /**
@@ -154,9 +179,91 @@ class InvoicesController extends Controller
      * @param  \App\Models\invoices  $invoices
      * @return \Illuminate\Http\Response
      */
-    public function destroy(invoices $invoices)
+    public function destroy($id)
     {
-        //
+        $invoices = invoices::findOrFail($id);
+        $invoices->delete();
+
+        session()->flash('Delete', 'تم حذف الفاتورة بنجاح');
+        return redirect('invoices.invoices');
+    }
+
+
+    public function status_show($id)
+    {
+
+        $invoices = invoices::where('id', $id)->first();
+        return view('invoices.status_show', compact('invoices'));
+    }
+
+    public function status_update(Request $request, $id)
+    {
+        $invoices = invoices::findOrFail($id);
+
+        if ($request->status === 'مدفوعة') {
+
+            $invoices->update([
+                'value_status' => 1,
+                'status' => $request->status,
+                'payment_Date' => $request->payment_Date,
+            ]);
+
+
+
+            invoices_details::create([
+                'id_Invoice' => $request->invoices_id,
+                'invoice_number' => $request->invoice_number,
+                'product' => $request->product,
+                'section' => $request->section,
+                'status' => $request->status,
+                'value_status' => 1,
+                'note' => $request->note,
+                'payment_Date' => $request->payment_Date,
+                'user' => (Auth::user()->name),
+            ]);
+        } else {
+
+            $invoices->update([
+
+                'value_status' => 3,
+                'status' => $request->status,
+                'payment_Date' => $request->payment_Date,
+            ]);
+
+            invoices_details::create([
+                'id_Invoice' => $request->invoices_id,
+                'invoice_number' => $request->invoice_number,
+                'product' => $request->product,
+                'section' => $request->section,
+                'status' => $request->status,
+                'value_status' => 3,
+                'note' => $request->note,
+                'payment_Date' => $request->payment_Date,
+                'user' => (Auth::user()->name),
+            ]);
+        }
+        session()->flash('Edit', 'تم تعديل حالة دفع الفاتورة بنجاح');
+        return redirect('invoices.invoices');
+    }
+
+
+
+    public function paid_invoices()
+    {
+        $invoices = invoices::where('value_status', 1)->get();
+        return view('invoices.paid_invoices', compact('invoices'));
+    }
+
+    public function un_paid_invoices()
+    {
+        $invoices = invoices::where('value_status', 2)->get();
+        return view('invoices.un_paid_invoices', compact('invoices'));
+    }
+
+    public function paid_partial_invoices()
+    {
+        $invoices = invoices::where('value_status', 3)->get();
+        return view('invoices.paid_partial_invoices', compact('invoices'));
     }
 
     public function getproducts($id)

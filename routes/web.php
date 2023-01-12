@@ -51,8 +51,17 @@ Route::resource('products', ProductsController::class);
 Route::get('/section/{id}', [InvoicesController::class, 'getproducts']);
 Route::get('/invoices_details/{id}', [InvoicesDetailsController::class, 'get_details']);
 Route::get('/View_file/{invoice_nubmber}/{file_name}', [InvoicesDetailsController::class, 'view_file']);
+Route::get('/status_show/{id}', [InvoicesController::class, 'status_show'])->name('status_show');
+Route::post('/status_update/{id}', [InvoicesController::class, 'status_update'])->name('status_update');
+
+Route::get('/paid_invoices', [InvoicesController::class, 'paid_invoices'])->name('paid_invoices');
+Route::get('/paid_partial_invoices', [InvoicesController::class, 'paid_partial_invoices'])->name('paid_partial_invoices');
+Route::get('/un_paid_invoices', [InvoicesController::class, 'un_paid_invoices'])->name('un_paid_invoices');
+
 Route::get('/download/{invoice_number}/{file_name}', [InvoicesDetailsController::class, 'download_file']);
 Route::post('/delete_file', [InvoicesDetailsController::class, 'destroy'])->name('delete_file');
+Route::resource('InvoiceAttachments', InvoiceAttachmentsController::class);
+
 Route::get('invoices_report', [InvoicsReportController::class, 'index']);
 Route::post('Search_invoices', [InvoicsReportController::class, 'Search_invoices']);
 
